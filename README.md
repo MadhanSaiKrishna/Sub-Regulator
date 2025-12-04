@@ -35,7 +35,7 @@ The final report and simulation logs located in this repository cover the follow
 
 ### 1. Static & Random Analysis
 
-* [ ] **PVT Analysis:** Static variation in output voltage across corners.
+* [ ] **PVT Analysis:** Static variation in output voltage across corners. (4-bit Resistive Trimming has to be performed for 5 corners)
 
 * [ ] **Monte Carlo Analysis:** Random variation histogram and statistical summary (Mean/Sigma) relative to the ±1.5% target.
 
@@ -63,10 +63,15 @@ The final report and simulation logs located in this repository cover the follow
 
 ## Tools Used
 
-* **Design:** Cadence Virtuoso
+* **Design:** Cadence Virtuoso, TSMC 180nm PDK
 
 * **Simulator:** Spectre
 
-## Author
+## Reference Textbooks Used
+- Analog Integrated Circuit Design, 2nd Edition (Tony Chan Carusone, David A. Johns,Kenneth W. Martin) - Chapter 7
+- CMOS Analog Circuit Design, 3rd Edition ( Phillip E. Allen,  Douglas R. Holberg) - Section 5.2.7
+- Design of Analog CMOS Integrated Circuits, 2nd Edition (Behzad Razavi) - Chapter 5,10,12
+
+## Designer
 
 * Madhan Sai Krishna

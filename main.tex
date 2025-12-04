@@ -1,0 +1,188 @@
+\documentclass[a4paper]{article}
+
+%% Language and font encodings
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+%% Page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+%% Packages
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{enumerate}
+\usepackage[noend]{algpseudocode}
+\setlength{\marginparwidth}{2cm}
+\usepackage[colorinlistoftodos]{todonotes}
+%% Always load hyperref last
+\usepackage[hidelinks]{hyperref}
+
+\title{\textbf{Sub-Regulator Design}}
+\author{Madhan Sai Krishna}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\newpage
+
+\section{Introduction}
+This document presents the design and analysis of a sub-regulator circuit.
+
+\section{Design of Sub-Regulator}
+\subsection{Design Methodology}
+\subsection{Theoretical Design}
+\subsection{Simulation results}
+
+\section{Implemention of Sub-Regulator}
+Implemented a Sub-Regulator circuit as shown in Figure \ref{fig:sub_regulator_circuit} using a PMOS pass transistor, 5 transistor Operational Transconductance Amplifier (5T OTA),a resistive feedback network and a simple beta-multiplier based bandgap reference.
+
+Target specifications for the sub-regulator are as follows:
+\begin{itemize}
+    \item \textbf{Input Voltage:} 3.3V (Range: $\pm$10\% i.e., 2.97V -- 3.63V)
+    \item \textbf{Output Voltage:} 2.8V (Target)
+    \item \textbf{Load Current:} 0 to 1mA (Nominal Range)
+    \item \textbf{Quiescent Current:} $<$ 500~\textmu A (No Load condition)
+    \item \textbf{PVT Variation:} $<$ 5~mV (Across Process, Voltage, Temperature)
+    \item \textbf{Monte Carlo (MC):} $<$ $\pm$1.5\% (Random Variation)
+    \item \textbf{Phase Margin:} $>$ 45$^\circ$ (Full Load)
+    \item \textbf{UGB:} $>$ 1~MHz (Full Load)
+    \item \textbf{PSRR (DC):} $>$ 40~dB
+    \item \textbf{PSRR (High Freq):} $>$ 0~dB (Must not drop below 0dB at any frequency)
+    \item \textbf{Impulse Response:} Capable of handling a sudden 6mA impulse (on top of 1mA static load) with a maximum undershoot of 25mV
+    \item \textbf{De-coupling Capacitor:} Optimized to meet the undershoot specification
+\end{itemize}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/implementation.png}
+    \caption{Sub-Regulator Circuit}
+    \label{fig:sub_regulator_circuit}
+\end{figure}
+
+\section{Stability Analysis}
+The phase margin of the designed sub-regulator is found to be 57.753 degrees > 45 degrees, indicating a stable system. 
+
+Unity gain bandwidth is observed to be 1.7067 MHz > 1 MHz requirement.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Images/stb_analysis_summary}
+    \caption{Loop Gain Analysis (No Load Condition)}
+    \label{fig:bode_plot}
+\end{figure}
+
+Used a 10pF miller compensation capacitor at the output node to achieve the desired phase margin.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/stb_analysis_plot}
+    \caption{Phase Margin Analysis (No Load Condition)}
+    \label{fig:phase_margin}
+\end{figure}
+
+\section{LDO Operation}
+\subsection{DC Operation}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/dc_operation.png}
+    \caption{LDO DC Operation}
+    \label{fig:ldo_dc_op}
+\end{figure}
+
+\subsection{Transient Operation}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/tran_operation.png}
+    \caption{Node Voltages in Transient Operation}
+    \label{fig:tran_node_voltages}
+\end{figure}
+
+\section{PSRR Analysis}
+PSRR is analysed in Typical corner at 27C, 3.3V supply voltage. The PSRR at 0Hz is found to be 32.3377dB < 40dB requirement.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/PSRR_plot.png}
+    \caption{PSRR Analysis}
+    \label{fig:psrr_analysis}
+\end{figure}
+
+\section{Load Regulation Analysis}
+Load regulation is analyzed by varying the load current from 0mA to 1mA (static load). The output voltage variation is found to be 2.1mV. (In Typical corner at 27C, 3.3V supply voltage)
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/load_regulation.png}
+    \caption{Load Regulation Analysis}
+    \label{fig:load_regulation}
+\end{figure}
+
+\section{Load Transient Analysis}
+110mV overshoot is observed in the output voltage when there is a load step change from 1mA to 7mA.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/overshoot}
+    \caption{Overshoot Analysis}
+    \label{fig:overshoot}
+\end{figure}
+
+\section{Testbench setup}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/output_setup.png}
+    \caption{Output setup in Maestro}
+    \label{fig:testbench_setup}
+\end{figure}
+
+\section{PVT Variation}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/current_pvt.png}
+    \caption{Total current consumption across PVT corners}
+    \label{fig:pvt_variation}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/pvt_output_results.png}
+    \caption{PVT Variation in Output Voltage}
+    \label{fig:voltage_pvt_variation}
+\end{figure}
+
+\section{Monte Carlo Analysis}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/MC_1.png}
+    \caption{Monte Carlo Analysis Results}
+    \label{fig:monte_carlo}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Images/MC_2.png}
+    \caption{Total Current Consumption in Monte Carlo Analysis}
+    % \label{fig:monte_carlo_current}
+\end{figure}
+\newpage
+
+\section{Note:}
+\begin{itemize}
+    \item All the Sub-regulator parameters like PSRR, PM, UGB, load regulation, etc., are captured in a single corner (Typical, 27C, 3.3V). Similar analysis needs to be done in all corners to ensure the design meets the specifications across PVT variations.
+    \item PSRR of the design is less than the required specification of 40dB at 0Hz. Further improvements like cascoding the current mirrors, using a diferent BGR topology, etc., can be explored to improve the PSRR and match the specification across corners and across frequency.
+    \item Used a Miller compensation technique to achieve the desired phase margin. Other compensation techniques can also be explored to optimize the design.
+    \item The overshoot specification is not matched, further optimization via adding a decoupling capacitor at the output node of BGR can be explored to meet the specification.
+    \item The resistive trimming can be done to improve the output voltage accuracy across PVT corners.
+    \item Used an ideal miller capacitor for compensation, the effect of parasitic capacitances can be explored further.
+    \item Need to calculate PVT variation and MC variation percentage properly based on the simulation results and make sure they meet the specifications.
+    \item While designing need to design keeping mind the PVT and MC variations, so that the design meets the specifications across all corners.
+    \item Redo the calculations done for BGR (the one included in this report + the other 3 designs like using different cascoded beta current multipliers) to ensure the design meets the specifications.
+    \item The gain of the OTA can be increased further to improve the PSRR and phase margin.
+    \item Fix the Maestro testbench. (Always use the value from the plot to verify the corner results)
+\end{itemize}
+\end{document}
